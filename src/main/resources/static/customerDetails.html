@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Details</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+}
+
+h2 {
+	color: #3498db;
+}
+
+input {
+	width: calc(50% - 10px);
+	padding: 8px;
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+.row {
+	margin-bottom: 20px;
+	display: flex;
+}
+
+.row input {
+	flex: 1;
+	margin-right: 10px;
+}
+
+button {
+	background-color: #3498db;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+	<h2>Customer Details</h2>
+
+	<form id="customerForm"
+		onsubmit="event.preventDefault(); createCustomer();">
+		<div class="row">
+			<input type="text" id="firstName" name="firstName"
+				placeholder="First Name" required> <input type="text"
+				id="lastName" name="lastName" placeholder="Last Name" required>
+		</div>
+
+		<div class="row">
+			<input type="text" id="street" name="street" placeholder="Street"
+				required> <input type="text" id="address" name="address"
+				placeholder="Address" required>
+		</div>
+
+		<div class="row">
+			<input type="text" id="city" name="city" placeholder="City" required>
+			<input type="text" id="state" name="state" placeholder="State"
+				required>
+		</div>
+
+		<div class="row">
+			<input type="email" id="email" name="email" placeholder="Email"
+				required> <input type="tel" id="phone" name="phone"
+				placeholder="Phone" required>
+		</div>
+
+		<button type="submit">Submit</button>
+	</form>
+
+	<script>
+		function createCustomer() {
+			var firstName = document.getElementById('firstName').value;
+			var lastName = document.getElementById('lastName').value;
+			var street = document.getElementById('street').value;
+			var address = document.getElementById('address').value;
+			var city = document.getElementById('city').value;
+			var state = document.getElementById('state').value;
+			var email = document.getElementById('email').value;
+			var phone = document.getElementById('phone').value;
+
+			var newCustomer = {
+				"first_name" : firstName,
+				"last_name" : lastName,
+				"street" : street,
+				"address" : address,
+				"city" : city,
+				"state" : state,
+				"email" : email,
+				"phone" : phone
+			};
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/api/create", true);
+			xhr.setRequestHeader("Content-Type",
+					"application/json;charset=UTF-8");
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 201) {
+						console.log("Customer created successfully");
+						window.location.href = 'customerList.html';
+					} else {
+						console.error("Error creating customer. Status: "
+								+ xhr.status);
+					}
+				}
+			};
+			xhr.send(JSON.stringify(newCustomer));
+		}
+	</script>
+
+</body>
+</html>
